@@ -22,6 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'hl&uy7%b2tytkwimz-kw=c5!)!w%hku0$v)1dz^wwj&_x_ip@u'
 
+
+# geo_coding_api_key = os.environ['geo_coding_api_key']
+geo_coding_api_key = 'AIzaSyC5MHHXhihWSstCPYevCzsMoEsDS6gtPYs'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
