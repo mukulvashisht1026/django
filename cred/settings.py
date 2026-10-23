@@ -24,7 +24,7 @@ SECRET_KEY = 'hl&uy7%b2tytkwimz-kw=c5!)!w%hku0$v)1dz^wwj&_x_ip@u'
 
 
 # geo_coding_api_key = os.environ['geo_coding_api_key']
-geo_coding_api_key = 'AIzaSyC5MHHXhihWSstCPYevCzsMoEsDS6gtPYs'
+geo_coding_api_key = os.environ.get('GEOCODING_API_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -132,3 +132,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# --- Local/Docker run overrides (added for minimal runnable setup) ---
+import os as _os
+ALLOWED_HOSTS = _os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
+# TODO: load SECRET_KEY from the environment before deploying.
+if _os.environ.get('USE_MOCKS', '1') == '1':
+    CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}  # MOCK: replaces django_redis

@@ -13,9 +13,9 @@ def index(request):
     context['location_form'] = location_form
 
     if(request.method == 'POST'):
-        location_name = request.body.name
-        print(location_name)
-        context['location'] = get_geocoding("banglore")
+        # TODO: validate the form properly (LocationModelForm) instead of reading raw POST data.
+        location_name = request.POST.get('name', 'bangalore')
+        context['location'] = get_geocoding(location_name)
         return render(request, template, context = context )
     else:
         context['name'] = 'Ashwani Get'
@@ -26,21 +26,19 @@ def index(request):
 def get_geocoding(location_name):
     location = Location()
     if is_location_in_cache(location_name):
-        data = cache.__getattribute__(location_name)
-        print("ashwani" + str(data))
-        return data
+        return cache.get(location_name)
     else:
-        get_from_api(location_name)
-        return
+        location = get_from_api(location_name)
+        cache.set(location_name, location)
+        return location
 
 def is_location_in_cache(location_name):
-    if cache.__contains__(location_name):
-        return True
-    return False
+    return cache.get(location_name) is not None
 
 def get_from_api(location_name):
+    # TODO: call a real geocoding API. MOCK: returns a fixed placeholder location.
     location = Location()
-    location.name = "random name api"
+    location.name = location_name
     location.lat = 0.0
     location.lon = 0.0
     return location
